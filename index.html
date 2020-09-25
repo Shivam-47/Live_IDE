@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js'></script>
+<style>
+ html,body {margin: 0; padding: 0; height:100%;
+ width:100%; overflow:hidden; }
+
+#editor {
+    height: 100%;
+    width: 50%;
+    display:inline-block;
+}
+
+#iframe {
+    height: 100%;
+    width: 50%;
+    display:inline-block;
+}
+
+#container{
+    height:100%;
+    width:auto;
+    white-space: nowrap; <!-- no-wrap when screen gets smaller -->
+    overflow: hidden;  <!-- no scrollbar-->
+
+}
+
+</style>
+</head>
+
+<body onload='ready()'>
+<div id='container'>
+    <div id='editor'>
+
+    </div>
+
+    <iframe id='iframe' frameBorder="0">
+
+    </iframe>
+ </div>
+<script>
+    function ready(){
+        
+    }
+</script>
+
+<script>
+
+function update(){
+    var idoc = document.getElementById('iframe').contentWindow.document;
+
+    idoc.open();
+    idoc.write(editor.getValue()); // gets value of editor for the iframe
+    idoc.close();
+}
+
+function setupEditor(){
+    window.editor = ace.edit("editor"); // uses editor id
+    editor.setTheme("ace/theme/monokai"); //theme
+    editor.setValue(     //sets value of basic html template
+        `<!DOCTYPE html>
+        <html>
+        <head>
+        </head>
+        
+        <body>
+        </body>
+
+        </html>`,1);
+    
+    editor.getSession().on('change',function(){
+        update();
+    });
+
+    editor.focus();
+    editor.setOptions({
+        fontfamily: "Monaco",
+        fontsize: "16pt",
+        showLineNumbers: false,
+        showGutter: false,
+        vScrollBarAlwaysVisible: true,
+        enableBasicAutocompletion: false,
+        enableLiveAutocompletion: false,
+
+    });
+
+    editor.setShowPrintMargin(false);
+    editor.setBehaviourEnabled(false);
+}
+
+function ready(){
+    setupEditor();
+    update();
+}
+    
+</script>
+
+</body>
+
+</html>
